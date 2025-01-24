@@ -37,7 +37,7 @@
       </div>
       <!-- Seccion Tabla -->
       <div class="table-responsive mb-4">
-        <table class="table table-hover">
+        <table class="table table-hover" id="tablaCursos">
           <thead class="table-light">
             <tr>
               <th scope="col" class="text-center">Año</th>
@@ -46,23 +46,26 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <th scope="row" class="text-center">1</th>
-              <td class="text-center">A</td>
-              <td class="text-center">
-                <button class="btn btn-sm btn-outline-primary">Ver</button>
-              </td>
-            </tr>
-            <tr>
-              <th scope="row" class="text-center">2</th>
-              <td class="text-center">A</td>
-              <td class="text-center">
-                <button class="btn btn-sm btn-outline-primary">Ver</button>
-              </td>
-            </tr>
+            <!-- Las filas serán generadas dinámicamente -->
           </tbody>
         </table>
       </div>
+      <!-- Contenedor para mostrar la tabla de alumnos -->
+      <div id="alumnosContainer" class="table-responsive mb-4" style="display: none;">
+        <table class="table table-hover" id="tablaAlumnos">
+          <thead class="table-light">
+            <tr>
+              <th scope="col" class="text-center">Nombre</th>
+              <th scope="col" class="text-center">Apellido</th>
+              <th scope="col" class="text-center">DNI</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Los alumnos se generarán aquí dinámicamente -->
+          </tbody>
+        </table>
+      </div>
+      
       <!-- Seccion de botones -->
       <div class="d-flex flex-column flex-md-row gap-2">
         <button id="btnAltaCurso" type="button" class="btn btn-primary flex-grow-1">Crear curso</button>

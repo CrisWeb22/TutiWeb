@@ -1,6 +1,7 @@
+
 document.addEventListener('DOMContentLoaded', function() {
     const formAltaCurso = document.getElementById('formAltaCurso');
-
+ 
     formAltaCurso.addEventListener('submit', async function(event) {
         event.preventDefault();
 
@@ -9,14 +10,15 @@ document.addEventListener('DOMContentLoaded', function() {
         const divisionCurso = document.getElementById('divisionCurso').value;
 
         try {
-            const response = await fetch('http://127.0.0.1:5000/cursos/registrar/segundo/2024', { //VER
+            console.log('llegue');
+            const response = await fetch('http://127.0.0.1:5000/cursos/registrar/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
                 },
                 body: JSON.stringify({
-                    "curso": añoCurso,
+                    "nombre": añoCurso,
                     "anio": divisionCurso
                 })
             });
