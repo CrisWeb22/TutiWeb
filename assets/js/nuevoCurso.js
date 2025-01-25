@@ -1,13 +1,14 @@
 console.log('Archivo nuevoCurso.js cargado');
 
 
+console.log('Formulario encontrado:', formAltaCurso);
 document.addEventListener('DOMContentLoaded', function() {
     const formAltaCurso = document.getElementById('formAltaCurso');
     console.log('Archivo nuevoCurso.js cargado X2');
 
-    console.log('Formulario encontrado:', formAltaCurso);
 
-    
+
+>>>>>>> origin/main
     formAltaCurso.addEventListener('submit', async function(event) {
         console.log('Ingresa al submit');
         event.preventDefault();
