@@ -4,6 +4,10 @@ console.log('Archivo nuevoCurso.js cargado');
 document.addEventListener('DOMContentLoaded', function() {
     const formAltaCurso = document.getElementById('formAltaCurso');
     console.log('Archivo nuevoCurso.js cargado X2');
+
+    console.log('Formulario encontrado:', formAltaCurso);
+
+    
     formAltaCurso.addEventListener('submit', async function(event) {
         console.log('Ingresa al submit');
         event.preventDefault();
@@ -40,3 +44,5 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
+
