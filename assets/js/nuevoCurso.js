@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
->>>>>>> origin/main
+
     formAltaCurso.addEventListener('submit', async function(event) {
         console.log('Ingresa al submit');
         event.preventDefault();

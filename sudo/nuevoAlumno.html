@@ -20,41 +20,33 @@
                         <!-- Datos personales -->
                         <div class="mb-3">
                             <label for="dni" class="form-label">DNI</label>
-                            <input type="text" class="form-control" id="dni" required pattern="\d{7,8}" title="Debe contener 7 u 8 dígitos.">
+                            <input type="text" class="form-control" id="dni" name="dni" required pattern="[0-9]{7,8}" title="Debe contener 7 u 8 dígitos.">
                         </div>
                         <div class="mb-3">
                             <label for="nombreAlumno" class="form-label">Nombre</label>
-                            <input type="text" class="form-control" id="nombreAlumno" required>
+                            <input type="text" class="form-control" id="nombreAlumno" name="nombre" required>
                         </div>
                         <div class="mb-3">
                             <label for="apellidoAlumno" class="form-label">Apellido</label>
-                            <input type="text" class="form-control" id="apellidoAlumno" required>
+                            <input type="text" class="form-control" id="apellidoAlumno" name="apellido" required>
                         </div>
-                        <!-- Tutor -->
+                        <!-- Tutor (DNI) -->
                         <div class="mb-3">
-                            <label class="form-label">Tutor</label>
-                            <div class="d-flex gap-2">
-                                <button type="button" id="btnVerTutores" class="btn btn-outline-secondary flex-grow-1">Ver Tutores</button>
-                                <button type="button" id="btnNuevoTutor" class="btn btn-outline-primary flex-grow-1">Nuevo Tutor</button>
-                            </div>
-                            <!-- Contenedor para mostrar la lista de tutores -->
-                            <div id="tutoresContainer" class="mt-3" style="display: none;">
-                                <label for="tutorSeleccionado" class="form-label">Seleccionar Tutor</label>
-                                <select id="tutorSeleccionado" class="form-select">
-                                    <option value="">Seleccione un tutor</option>
-                                    <!-- Opciones serán generadas dinámicamente -->
-                                </select>
-                            </div>
+                            <label for="dniTutor" class="form-label">DNI del Tutor</label>
+                            <input type="text" class="form-control" id="dniTutor" name="dni_tutor" required pattern="[0-9]{7,8}" title="Debe contener 7 u 8 dígitos.">
                         </div>
-                        <!-- Curso -->
+                        <!-- Curso (Lista desplegable) -->
                         <div class="mb-3">
                             <label for="cursoAlumno" class="form-label">Curso</label>
-                            <input type="text" class="form-control" id="cursoAlumno" required>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="cursoAlumno" name="curso" readonly required>
+                                <button type="button" class="btn btn-outline-primary" id="btnSeleccionarCurso">Seleccionar Curso</button>
+                            </div>
                         </div>
                         <!-- Fecha de Nacimiento -->
                         <div class="mb-3">
                             <label for="fechaNacimiento" class="form-label">Fecha de Nacimiento</label>
-                            <input type="date" class="form-control" id="fechaNacimiento" required>
+                            <input type="date" class="form-control" id="fechaNacimiento" name="fecha_nacimiento" required>
                         </div>
                     </form>
                 </div>

@@ -24,6 +24,14 @@
       max-width: 1200px;
       width: 100%;
   }
+
+  .logo {
+    width: 80px;
+    height: 80px;
+    border-radius: 40%;
+    object-fit: cover;
+    margin-bottom: 15px;
+  }
   
   .btn-primary {
       background-color: #0078d7;
