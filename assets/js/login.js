@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         window.location.href = 'sudo/inicio.html';
                         break;
                     case 'PRECEPTOR':
-                        window.location.href = '/preceptor/dashboard';
+                        window.location.href = 'precep/inicio.html';
                         break;
                     case 'ADMIN':
                         window.location.href = '/tutor/dashboard';
