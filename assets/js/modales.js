@@ -71,9 +71,13 @@ async function cargarCursos() {
     }
 }
 
-function verDetalles(id) {
-    alert(`Ver detalles del curso ID: ${id}`);
+
+
+function verDetalles(id) { //COLOCAR LA NUEVA VENTANA
+    window.location.href = `preceptorCurso.html?cursoId=${id}`;
 }
+
+
 
 // Función para cargar y MOSTRAR EL MODAL
 function cargarModal(url, modalId, callback) {
@@ -99,6 +103,8 @@ function cargarModal(url, modalId, callback) {
       })
       .catch(error => console.error('Error al cargar el modal:', error));
 }
+
+
 
 // Función para gestionar el formulario del CURSO
 function gestionarFormularioCurso(modalId) {
