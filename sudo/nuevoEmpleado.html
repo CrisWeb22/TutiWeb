@@ -39,19 +39,16 @@
                         <input type="text" class="form-control" id="paswordEmpleado" required>
                     </div>
                     <div class="mb-3">
-                        <label for="emailEmpleado" class="form-label">Correo Electrónico (opcional)</label>
+                        <label for="emailEmpleado" class="form-label">Correo Electrónico</label>
                         <input type="email" class="form-control" id="emailEmpleado">
                     </div>
                     <div class="mb-3">
-                        <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                              Selección de cargo
-                            </button>
-                            <ul class="dropdown-menu">
-                              <li><a class="dropdown-item" href="#">Preceptor</a></li>
-                              <li><a class="dropdown-item" href="#">Administrador</a></li>
-                            </ul>
-                          </div>
+                        <label for="rolEmpleado" class="form-label">Cargo</label>
+                        <select class="form-select" id="rolEmpleado" required>
+                            <option value="">Seleccione un cargo</option>
+                            <option value="PRECEPTOR">Preceptor</option>
+                            <option value="ADMINISTRADOR">Administrador</option>
+                        </select>
                     </div>
                 </form>
             </div>

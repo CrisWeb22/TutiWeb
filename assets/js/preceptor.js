@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function () {
               return;
           }
   
-          const response = await fetch('http://127.0.0.1:5000/cursos/preceptor/', {
+          const response = await fetch('http://127.0.0.1:5000/cursos/preceptor', {
               method: 'GET',
               headers: {
                   'Authorization': `Bearer ${token}`,
@@ -70,8 +70,6 @@ document.addEventListener('DOMContentLoaded', function () {
   function verDetalles(id) {
       alert(`Ver detalles del curso ID: ${id}`);
   }
-  
-  
   
   // Función para buscar ALUMNO 
   document.getElementById('btnBuscar').addEventListener('click', buscarAlumnoPorDNI);
@@ -133,30 +131,23 @@ async function buscarAlumnoPorDNI() {
 }
 
 async function cargarDatosPreceptor() {
-    try {
-        const token = localStorage.getItem('token');
-        if (!token) {
-            alert('No autorizado. Inicie sesión.');
-            return;
+    const nombreUsuario = localStorage.getItem('nombre');
+
+    if (nombreUsuario) {
+        const elementoNombreUsuario = document.getElementById('nombreUsuario');
+        if (elementoNombreUsuario) {
+            elementoNombreUsuario.textContent = nombreUsuario;
         }
-        
-        const response = await fetch('http://127.0.0.1:5000/preceptor/perfil', {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            }
-        });
-        
-        if (!response.ok) {
-            throw new Error('Error al obtener datos del preceptor');
-        }
-        
-        const data = await response.json();
-        if (data.nombre) {
-            document.getElementById('nombreUsuario').textContent = data.nombre;
-        }
-    } catch (error) {
-        console.error('Error:', error);
+    } else {
+        console.error('No se encontró el nombre del usuario en el localStorage.');
     }
 }
+// VER CUAL QUEDA SI ESTA O LA PRIMERA
+const btnSalir = document.getElementById('btnSalir');
+    if (btnSalir) {
+        btnSalir.addEventListener('click', function() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('nombre');
+            window.location.href = '/login.html';
+        });
+    }

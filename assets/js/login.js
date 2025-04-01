@@ -24,6 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (response.ok) {
                 // Guardamos el token JWT que nos devuelve el backend
                 localStorage.setItem('token', data.token);
+                localStorage.setItem('nombre', data.nombre);
                 
                 // Redirigir según el rol del usuario
                 switch(data.rol) {
@@ -34,7 +35,10 @@ document.addEventListener('DOMContentLoaded', function() {
                         window.location.href = 'precep/inicio.html';
                         break;
                     case 'ADMIN':
-                        window.location.href = '/tutor/dashboard';
+                        window.location.href = '/tutor/dashboard'; // VER A DONDE VA ESTA VERGA DUPLICAR VENTANAS DE SUDO
+                        break;
+                    case 'TUTOR':
+                        window.location.href = 'tutor/inicioTutor.html';
                         break;
                 }
             } else {
