@@ -25,12 +25,36 @@ document.addEventListener('DOMContentLoaded', async function() {
     await cargarAlumnosCurso(nombreCurso, anioCurso);
 });
 
-// Evento para el botón "Sumar alumno"
+document.querySelector("#tablaAlumnos tbody").addEventListener("click", (event) => {
+    if (event.target.classList.contains("ver-situacion")) {
+        const button = event.target;
+        const id = button.dataset.id;
+        const nombre = button.dataset.nombre;
+        const apellido = button.dataset.apellido;
+
+        const nombreCurso = decodeURIComponent(new URLSearchParams(window.location.search).get('nombreCurso'));
+        const anioCurso = new URLSearchParams(window.location.search).get('anioCurso');
+
+        const params = new URLSearchParams({
+            id: id,
+            nombre: nombre,
+            apellido: apellido,
+            nombreCurso: nombreCurso,
+            anioCurso: anioCurso
+        });
+
+        window.location.href = `situacionAlumno.html?${params.toString()}`;
+    }
+});
+
+
+// SUMAR ALUMNO
 document.getElementById("btnSumarAlumno").addEventListener("click", () => {
     const modal = new bootstrap.Modal(document.getElementById('buscarAlumnoModal'));
     modal.show();
 });
 
+//BUSCAR ALUMNO
 document.getElementById("btnBuscarAlumno").addEventListener("click", async () => {
     const dni = document.getElementById("dniAlumno").value.trim();
     if (!dni) {
@@ -39,7 +63,7 @@ document.getElementById("btnBuscarAlumno").addEventListener("click", async () =>
     }
 
     try {
-        const response = await fetch(`http://127.0.0.1:5000/personas/${dni}`, {
+        const response = await fetch(`http://127.0.0.1:5000/alumnos/info/${dni}`, {
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('token')}`
             }
@@ -59,6 +83,60 @@ document.getElementById("btnBuscarAlumno").addEventListener("click", async () =>
     }
 });
 
+// ELIMINAR ALUMNO
+document.querySelector("#btnDarDeBaja").addEventListener("click", async () => {
+    const checkboxes = document.querySelectorAll(".seleccionar-alumno:checked");
+    if (checkboxes.length === 0) {
+        alert("Por favor seleccione al menos un alumno para dar de baja.");
+        return;
+    }
+
+    if (!confirm("¿Está seguro que desea dar de baja al alumno seleccionado del curso?")) {
+        return;
+    }
+
+    const nombreCurso = decodeURIComponent(new URLSearchParams(window.location.search).get('nombreCurso'));
+    const anioCurso = new URLSearchParams(window.location.search).get('anioCurso');
+    //console.log(nombreCurso);
+    //console.log(anioCurso);
+    
+
+    for (const checkbox of checkboxes) {
+        const idAlu = checkbox.dataset.id;
+        //console.log(idAlu);
+
+        try {
+            const response = await fetch("http://127.0.0.1:5000/alumnos/desvincularCurso", {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${localStorage.getItem("token")}`
+                },
+                body: JSON.stringify({
+                    idAlu: parseInt(idAlu),
+                    nombreCurso: nombreCurso,
+                    anio: anioCurso
+                })
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                console.log(result.message);
+            } else {
+                console.warn(result.message || "Error al dar de baja al alumno");
+            }
+
+        } catch (error) {
+            console.error("Error en la solicitud de baja:", error);
+        }
+    }
+
+    // Refrescar tabla de alumnos luego de las bajas
+    await cargarAlumnosCurso(nombreCurso, anioCurso);
+});
+
+
 function mostrarResultadoBusqueda(alumno) {
     const resultadoDiv = document.getElementById("resultadoBusqueda");
     const btnAsignar = document.getElementById("btnAsignarAlumno");
@@ -66,15 +144,15 @@ function mostrarResultadoBusqueda(alumno) {
     resultadoDiv.innerHTML = `
         <div class="card">
             <div class="card-body">
-                <h5>${alumno.nombrealu} ${alumno.apealu}</h5>
-                <p>DNI: ${alumno.dnialu}</p>
+                <h5>${alumno.nombre} ${alumno.apellido}</h5>
+                <p>DNI: ${alumno.dni}</p>
                 <p>Estado: ${alumno.estado}</p>
             </div>
         </div>
     `;
 
     btnAsignar.disabled = false;
-    btnAsignar.onclick = () => asignarAlumnoAlCurso(alumno.idalu);
+    btnAsignar.onclick = () => asignarAlumnoAlCurso(alumno.id); // ¡Usar alumno.id (no idalu)!
 }
 
 async function cargarPreceptorAsignado(nombreCurso, anioCurso) {
@@ -94,7 +172,7 @@ async function cargarPreceptorAsignado(nombreCurso, anioCurso) {
         // Verificar estado de la respuesta
         if (response.status === 401) {
             alert('No tienes permisos para ver esta información');
-            window.location.href = '/login.html';
+            window.location.href = '/index.html';
             return;
         }
 
@@ -142,16 +220,9 @@ async function cargarPreceptorAsignado(nombreCurso, anioCurso) {
 
 async function cargarAlumnosCurso(nombreCurso, anioCurso) {
     try {
-        const token = localStorage.getItem('token');
-        if (!token) {
-            throw new Error('No hay token de autenticación');
-        }
-
-        // Aquí deberías usar tu endpoint real para obtener alumnos
-        const response = await fetch(`http://127.0.0.1:5000/cursos/alumnos/${encodeURIComponent(nombreCurso)}/${anioCurso}`, {
-            method: 'GET',
+        const response = await fetch(`http://127.0.0.1:5000/alumnos/${nombreCurso}/${anioCurso}`, {
             headers: {
-                'Authorization': `Bearer ${token}`
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
             }
         });
 
@@ -159,11 +230,11 @@ async function cargarAlumnosCurso(nombreCurso, anioCurso) {
             const alumnos = await response.json();
             llenarTablaAlumnos(alumnos);
         } else {
-            throw new Error('Error al obtener alumnos del curso');
+            throw new Error("Error al cargar alumnos");
         }
     } catch (error) {
-        console.error("Error al cargar alumnos:", error);
-        alert("No se pudieron cargar los alumnos");
+        console.error("Error en cargarAlumnosCurso:", error);
+        alert("No se pudieron cargar los alumnos. Intente recargar la página.");
     }
 }
 
@@ -256,10 +327,20 @@ function llenarTablaAlumnos(alumnos) {
     alumnos.forEach(alumno => {
         const fila = document.createElement('tr');
         fila.innerHTML = `
-            <td class="text-center">${alumno.nombre}</td>
-            <td class="text-center">${alumno.apellido}</td>
             <td class="text-center">
-                <button class="btn btn-warning btn-sm">Ver Situación</button>
+                <input type="checkbox" class="seleccionar-alumno" data-id="${alumno.idAlu}">
+            </td>
+            <td class="text-center">${alumno.nombre || alumno.nombrealu}</td>
+            <td class="text-center">${alumno.apellido || alumno.apealu}</td>
+            <td class="text-center">
+                <button 
+                    class="btn btn-warning btn-sm ver-situacion"
+                    data-id="${alumno.idAlu}" 
+                    data-nombre="${alumno.nombre || alumno.nombrealu}"
+                    data-apellido="${alumno.apellido || alumno.apealu}"
+                >
+                    Ver Situación
+                </button>
             </td>
         `;
         tbody.appendChild(fila);
@@ -341,10 +422,13 @@ async function asignarPreceptor(preceptorNombre, preceptorApellido) {
     }
 }
 
-async function asignarAlumnoAlCurso(idAlumno) {
+async function asignarAlumnoAlCurso(idAlumno) {  
     const params = new URLSearchParams(window.location.search);
     const nombreCurso = params.get('nombreCurso');
     const anioCurso = params.get('anioCurso');
+    //console.log(idAlumno)
+    //console.log(nombreCurso)
+    //console.log(anioCurso)
 
     try {
         const response = await fetch("http://127.0.0.1:5000/alumnos/curso", {
@@ -354,22 +438,22 @@ async function asignarAlumnoAlCurso(idAlumno) {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                id: idAlumno,
+                id: Number(idAlumno), // Debe ser 15 (idalu), no 36852147 (DNI)
                 curso: nombreCurso,
                 anio: anioCurso
             })
         });
 
-        if (response.ok) {
-            alert("Alumno asignado correctamente");
-            // Cerrar modal y recargar tabla
-            bootstrap.Modal.getInstance(document.getElementById('buscarAlumnoModal')).hide();
-            await cargarAlumnosCurso(nombreCurso, anioCurso);
-        } else {
-            const error = await response.json();
-            throw new Error(error.message || "Error al asignar");
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || "Error al asignar alumno");
         }
+
+        alert("Alumno asignado correctamente");
+        await cargarAlumnosCurso(nombreCurso, anioCurso);
+        bootstrap.Modal.getInstance(document.getElementById('buscarAlumnoModal')).hide();
     } catch (error) {
-        alert(`Error: ${error.message}`);
+        console.error("Error en asignarAlumnoAlCurso:", error);
+        alert(`Error: ${error.message.includes("duplicada") ? "El alumno ya está en este curso" : error.message}`);
     }
 }

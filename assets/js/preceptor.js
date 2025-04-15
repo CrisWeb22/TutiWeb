@@ -44,20 +44,21 @@ document.addEventListener('DOMContentLoaded', function () {
           }
   
           const data = await response.json();
-          if (data.cursos && data.cursos.length > 0) {
-              data.cursos.forEach(curso => {
-                  const fila = document.createElement('tr');
-  
-                  fila.innerHTML = `
-                      <td class="text-center">${curso.anio}</td>
-                      <td class="text-center">${curso.nombre}</td>
-                      <td class="text-center">
-                          <button class="btn btn-sm btn-primary" onclick="verDetalles(${curso.id})">Ver</button>
-                      </td>
-                  `;
-  
-                  tablaCursosBody.appendChild(fila);
-              });
+        if (data.cursos && data.cursos.length > 0) {
+            data.cursos.forEach(curso => {
+                const fila = document.createElement('tr');
+                fila.innerHTML = `
+                    <td class="text-center">${curso.anio}</td>
+                    <td class="text-center">${curso.nombre}</td>
+                    <td class="text-center">
+                        <button class="btn btn-sm btn-primary" 
+                            onclick="verDetalles('${curso.nombre}', '${curso.anio}')">
+                            Ver
+                        </button>
+                    </td>
+                `;
+                tablaCursosBody.appendChild(fila);
+            });
           } else {
               tablaCursosBody.innerHTML = '<tr><td colspan="3" class="text-center">No hay cursos disponibles</td></tr>';
           }
@@ -67,9 +68,12 @@ document.addEventListener('DOMContentLoaded', function () {
       }
   }
   
-  function verDetalles(id) {
-      alert(`Ver detalles del curso ID: ${id}`);
-  }
+  function verDetalles(nombreCurso, anioCurso) {
+    // Codificar el nombre para URL
+    const nombreCodificado = encodeURIComponent(nombreCurso);
+    // Redirigir a detalleCursoPreceptor.html con parámetros
+    window.location.href = `detalleCursoPreceptor.html?nombreCurso=${nombreCodificado}&anioCurso=${anioCurso}`;
+}
   
   // Función para buscar ALUMNO 
   document.getElementById('btnBuscar').addEventListener('click', buscarAlumnoPorDNI);
